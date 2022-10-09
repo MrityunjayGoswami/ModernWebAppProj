@@ -1,31 +1,17 @@
 package main
 
 import (
-	"encoding/json"
-	"log"
+	"fmt"
+	"net/http"
 )
 
-type Person struct{
-	FirstNmae string `json:"first_name"`
-	LastName string `json:"last_name"`
-}
-
-func main(){
-	myJson:= `
-[
-	{
-		"first_name": "Clark",
-		"last_name": "Kent"
-	},
-	{
-		"first_name": "Bruce",
-		"last_name": "Wayne"
-	}
-]`
-	var unmarshalled []Person
-	err := json.Unmarshal([]byte(myJson),&unmarshalled)
-	if err != nil{
-		log.Println("Erroe unmarshling Json",err)
-	}
-	log.Printf("Unmarshalled: %v", unmarshalled)
+func main()  {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		n,err := fmt.Fprintf(w,"Hello, World")
+		if err != nil{
+			fmt.Println(err)
+		}
+		fmt.Println(fmt.Sprintf("Number of bites written : %d",n))
+	})
+	_ = http.ListenAndServe(":8080",nil)
 }
